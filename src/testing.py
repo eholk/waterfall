@@ -85,7 +85,7 @@ class Tester(object):
       print 'no error'
     except proc.CalledProcessError as e:
       print 'error', e
-      return Result(test=basename, success=False, output=e.output)
+      return Result(test=basename, success=False, output='failzey')
     # Flush the logged command so buildbots don't think the script is dead.
     sys.stdout.flush()
     return Result(test=basename, success=True, output='okeydokey')
