@@ -79,7 +79,7 @@ class Tester(object):
     try:
       output = proc.check_output(
           self.command_ctor(test_file, outfile, self.extras),
-          stderr=proc.STDOUT, cwd=self.outdir or os.getcwd(),
+          cwd=self.outdir or os.getcwd(),
           preexec_fn=Tester.setlimits)
       # Flush the logged command so buildbots don't think the script is dead.
       sys.stdout.flush()
@@ -183,7 +183,7 @@ def similarity(results, cutoff):
 def execute(tester, inputs, fails):
   """Execute tests in parallel, output results, return failure count."""
   input_expected_failures = get_expected_failures(fails) if fails else []
-  pool = multiprocessing.Pool()
+  pool = multiprocessing.Pool(1)
   sys.stdout.write('Executing tests.')
   results = sorted(pool.map(tester, inputs))
   pool.close()
