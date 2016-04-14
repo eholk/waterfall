@@ -76,16 +76,20 @@ class Tester(object):
     """Execute a single test."""
     basename = os.path.basename(test_file)
     outfile = self.outname_ctor(self.outdir, test_file) if self.outdir else ''
+    print 'running', self.command_ctor(test_file, outfile, self.extras)
     try:
       output = proc.check_output(
           self.command_ctor(test_file, outfile, self.extras),
           cwd=self.outdir or os.getcwd(),
           preexec_fn=Tester.setlimits)
-      # Flush the logged command so buildbots don't think the script is dead.
-      sys.stdout.flush()
-      return Result(test=basename, success=True, output=output)
+      print 'no error'
     except proc.CalledProcessError as e:
+      print 'error', e
       return Result(test=basename, success=False, output=e.output)
+    # Flush the logged command so buildbots don't think the script is dead.
+    print 'output', output
+    sys.stdout.flush()
+    return Result(test=basename, success=True, output=output)
 
 
 def get_expected_failures(fails):
