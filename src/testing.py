@@ -78,7 +78,7 @@ class Tester(object):
     outfile = self.outname_ctor(self.outdir, test_file) if self.outdir else ''
     print 'running', self.command_ctor(test_file, outfile, self.extras)
     try:
-      output = proc.check_output(
+      proc.check_call(
           self.command_ctor(test_file, outfile, self.extras),
           cwd=self.outdir or os.getcwd(),
           preexec_fn=Tester.setlimits)
@@ -87,9 +87,8 @@ class Tester(object):
       print 'error', e
       return Result(test=basename, success=False, output=e.output)
     # Flush the logged command so buildbots don't think the script is dead.
-    print 'output', output
     sys.stdout.flush()
-    return Result(test=basename, success=True, output=output)
+    return Result(test=basename, success=True, output='okeydokey')
 
 
 def get_expected_failures(fails):
